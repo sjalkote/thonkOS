@@ -21,6 +21,7 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
     .revision = 0
 };
 
+
 // Finally, define the start and end markers for the Limine requests.
 // These can also be moved anywhere, to any .c file, as seen fit.
 

@@ -1,5 +1,6 @@
 obj/
 bin/
+iso/
 
 # IDE-related ignores
 .idea/

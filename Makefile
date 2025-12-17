@@ -7,7 +7,7 @@ override OUTPUT := thonkOS
 
 # User controllable toolchain and toolchain prefix.
 TOOLCHAIN :=
-TOOLCHAIN_PREFIX :=
+TOOLCHAIN_PREFIX := x86_64-elf-
 ifneq ($(TOOLCHAIN),)
     ifeq ($(TOOLCHAIN_PREFIX),)
         TOOLCHAIN_PREFIX := $(TOOLCHAIN)-
@@ -131,7 +131,31 @@ obj/%.asm.o: %.asm Makefile
 	mkdir -p "$(dir $@)"
 	nasm $(NASMFLAGS) $< -o $@
 
+.PHONY: clean iso run
 # Remove object files and the final executable.
-.PHONY: clean
 clean:
-	rm -rf bin obj
+	rm -rf bin obj iso
+
+# Build ISO image
+iso: all
+	mkdir -p iso/boot
+	cp -v bin/thonkOS iso/boot/
+	mkdir -p iso/boot/limine
+	cp -v limine.conf limine/limine-bios.sys limine/limine-bios-cd.bin \
+		limine/limine-uefi-cd.bin iso/boot/limine/
+	# Create EFI/BOOT with limine EFI binaries
+	mkdir -p iso/EFI/BOOT
+	cp -v limine/BOOTX64.EFI iso/EFI/BOOT/
+	cp -v limine/BOOTIA32.EFI iso/EFI/BOOT/
+	# Create the bootable ISO.
+	xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
+			-no-emul-boot -boot-load-size 4 -boot-info-table -hfsplus \
+			-apm-block-size 2048 --efi-boot boot/limine/limine-uefi-cd.bin \
+			-efi-boot-part --efi-boot-image --protective-msdos-label \
+			iso -o bin/thonkOS.iso
+	# Install Limine stage 1 and 2 for legacy BIOS boot.
+	./limine/limine bios-install bin/thonkOS.iso
+
+# Run with QEMU using the ISO as bootable CD-ROM
+run: iso
+	qemu-system-x86_64 -boot d -cdrom bin/thonkOS.iso -m 512
