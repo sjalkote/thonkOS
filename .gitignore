@@ -1,0 +1,6 @@
+out/
+
+# IDE-related ignores
+.idea/
+.vscode/
+
