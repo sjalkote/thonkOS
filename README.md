@@ -17,6 +17,6 @@ a bootable ISO.
 
 To create the bootable ISO image:
 1. Run `make -C limine` if you haven't before to build the limine utility.
-2. Run `make iso` which will handle the rest and generate the file in `bin/thonkOS.iso`.
+2. Run `make iso` which will handle the rest and generate the file in `out/thonkOS.iso`.
 
 To **run** the OS using QEMU you can use the `make run` script (automatically rebuilds ISO when necessary).

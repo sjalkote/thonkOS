@@ -1,6 +1,4 @@
-obj/
-bin/
-iso/
+out/
 
 # IDE-related ignores
 .idea/

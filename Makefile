@@ -101,61 +101,61 @@ override SRCFILES := $(shell find -L src -type f 2>/dev/null | LC_ALL=C sort)
 override CFILES := $(filter %.c,$(SRCFILES))
 override ASFILES := $(filter %.S,$(SRCFILES))
 override NASMFILES := $(filter %.asm,$(SRCFILES))
-override OBJ := $(addprefix obj/,$(CFILES:.c=.c.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o))
-override HEADER_DEPS := $(addprefix obj/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d))
+override OBJ := $(addprefix out/obj/,$(CFILES:.c=.c.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o))
+override HEADER_DEPS := $(addprefix out/obj/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d))
 
 # Default target. This must come first, before header dependencies.
 .PHONY: all
-all: bin/$(OUTPUT)
+all: out/bin/$(OUTPUT)
 
 # Include header dependencies.
 -include $(HEADER_DEPS)
 
 # Link rules for the final executable.
-bin/$(OUTPUT): Makefile src/linker.lds $(OBJ)
+out/bin/$(OUTPUT): Makefile src/linker.lds $(OBJ)
 	mkdir -p "$(dir $@)"
 	$(LD) $(LDFLAGS) $(OBJ) -o $@
 
 # Compilation rules for *.c files.
-obj/%.c.o: %.c Makefile
+out/obj/%.c.o: %.c Makefile
 	mkdir -p "$(dir $@)"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.S files.
-obj/%.S.o: %.S Makefile
+out/obj/%.S.o: %.S Makefile
 	mkdir -p "$(dir $@)"
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.asm (nasm) files.
-obj/%.asm.o: %.asm Makefile
+out/obj/%.asm.o: %.asm Makefile
 	mkdir -p "$(dir $@)"
 	nasm $(NASMFLAGS) $< -o $@
 
 .PHONY: clean iso run
 # Remove object files and the final executable.
 clean:
-	rm -rf bin obj iso
+	rm -rf out
 
 # Build ISO image
 iso: all
-	mkdir -p iso/boot
-	cp -v bin/thonkOS iso/boot/
-	mkdir -p iso/boot/limine
+	mkdir -p out/iso/boot
+	cp -v out/bin/thonkOS out/iso/boot/
+	mkdir -p out/iso/boot/limine
 	cp -v limine.conf limine/limine-bios.sys limine/limine-bios-cd.bin \
-		limine/limine-uefi-cd.bin iso/boot/limine/
+		limine/limine-uefi-cd.bin out/iso/boot/limine/
 	# Create EFI/BOOT with limine EFI binaries
-	mkdir -p iso/EFI/BOOT
-	cp -v limine/BOOTX64.EFI iso/EFI/BOOT/
-	cp -v limine/BOOTIA32.EFI iso/EFI/BOOT/
+	mkdir -p out/iso/EFI/BOOT
+	cp -v limine/BOOTX64.EFI out/iso/EFI/BOOT/
+	cp -v limine/BOOTIA32.EFI out/iso/EFI/BOOT/
 	# Create the bootable ISO.
 	xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
 			-no-emul-boot -boot-load-size 4 -boot-info-table -hfsplus \
 			-apm-block-size 2048 --efi-boot boot/limine/limine-uefi-cd.bin \
 			-efi-boot-part --efi-boot-image --protective-msdos-label \
-			iso -o bin/thonkOS.iso
+			out/iso -o out/thonkOS.iso
 	# Install Limine stage 1 and 2 for legacy BIOS boot.
-	./limine/limine bios-install bin/thonkOS.iso
+	./limine/limine bios-install out/thonkOS.iso
 
 # Run with QEMU using the ISO as bootable CD-ROM
 run: iso
-	qemu-system-x86_64 -boot d -cdrom bin/thonkOS.iso -m 512
+	qemu-system-x86_64 -boot d -cdrom out/thonkOS.iso -m 512
