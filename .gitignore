@@ -1,6 +1,6 @@
-out/
+obj/
+bin/
 
 # IDE-related ignores
 .idea/
 .vscode/
-
