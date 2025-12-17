@@ -13,7 +13,7 @@ a bootable ISO.
 > with `brew install x86_64-elf-gcc`).
 > 
 > If you are not using macOS you can change this variable or specify the empty prefix in your make commands
-> (e.g. `make TOOLCHAIN_PREFIX= iso`).
+> (e.g. `make TOOLCHAIN_PREFIX="" iso`).
 
 To create the bootable ISO image:
 1. Run `make -C limine` if you haven't before to build the limine utility.
