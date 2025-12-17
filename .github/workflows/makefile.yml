@@ -1,0 +1,32 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Install dependencies
+        run: sudo apt install -y xorriso && make -C limine
+
+      - name: Build with Makefile
+        run: make TOOLCHAIN_PREFIX=""
+
+      - name: Generate .iso image
+        run: make iso
+
+      - name: Upload .iso artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: thonkOS.iso
+          path: out/thonkOS.iso
