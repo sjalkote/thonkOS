@@ -17,7 +17,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Install dependencies
-        run: sudo apt install -y xorriso
+        run: sudo apt install -y xorriso && make -C limine
 
       - name: Build with Makefile
         run: make TOOLCHAIN_PREFIX=""
