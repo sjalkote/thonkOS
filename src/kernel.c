@@ -11,7 +11,7 @@ __attribute__((used, section(".limine_requests")))
 static volatile uint64_t limine_base_revision[] = LIMINE_BASE_REVISION(4);
 
 // The Limine requests can be placed anywhere, but it is important that
-// the compiler does not optimise them away, so, usually, they should
+// the compiler does not optimize them away, so, usually, they should
 // be made volatile or equivalent, _and_ they should be accessed at least
 // once or marked as used with the "used" attribute as done here.
 
@@ -114,9 +114,11 @@ void kmain(void) {
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
 
     // Note: we assume the framebuffer model is RGB with 32-bit pixels.
-    for (size_t i = 0; i < 100; i++) {
+    uint64_t minDimension = framebuffer->height < framebuffer->width ? framebuffer->height : framebuffer->width;
+    const int colors[] = {0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0xff00ff};
+    for (size_t i = 0; i < minDimension; i++) {
         volatile uint32_t *fb_ptr = framebuffer->address;
-        fb_ptr[i * (framebuffer->pitch / 4) + i] = 0xffffff;
+        fb_ptr[i * (framebuffer->pitch / 4) + i] = (i / 100 < sizeof(colors) / sizeof(colors[0]) ? colors[i / 100] : 0xffffff);
     }
 
     // We're done, just hang...
