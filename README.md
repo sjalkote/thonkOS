@@ -7,6 +7,8 @@ The `Makefile` contains the bulk of the logic for automated builds and
 runs. The scripts within it can be used to compile the kernel and create
 a bootable ISO.
 
+Each GitHub actions workflow run also generates an artifact of the ISO image that can be downloaded.
+
 > [!IMPORTANT]  
 > I'm on macOS where the toolchain is missing the ELF binaries for Limine, so I set the Makefile
 > to use the `TOOLCHAIN_PREFIX := x86_64-elf-` by default (you can install the GCC cross-compiler 
