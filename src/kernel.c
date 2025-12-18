@@ -95,6 +95,50 @@ static void hcf(void) {
     }
 }
 
+static const uint8_t font[128][8] = {
+    ['H'] = {
+        0b01000010,
+        0b01000010,
+        0b01000010,
+        0b01111110,
+        0b01000010,
+        0b01000010,
+        0b01000010,
+        0b01000010
+    },
+    ['M'] = {
+        0b01000010,
+        0b01100110,
+        0b01011010,
+        0b01000010,
+        0b01000010,
+        0b01000010,
+        0b01000010,
+        0b01000010
+    }
+};
+
+/**
+ * Writes the specified character to the framebuffer at the given (x, y) coordinate position.
+ * @param framebuffer The limine framebuffer to write to.
+ * @param c The character to write. Must be a standard ASCII between [0, 127].
+ * @param x The x-coordinate position to write at.
+ * @param y The y-coordinate position to write at.
+ */
+void put_char(const struct limine_framebuffer *framebuffer, const char c, const uint32_t x, const uint32_t y) {
+    const uint8_t *glyph = font[(uint8_t)c];
+    volatile uint32_t *fb_ptr = framebuffer->address;
+
+    for (uint32_t row = 0; row < 8; row++) {
+        for (uint32_t col = 0; col < 8; col++) {
+            if (glyph[row] & (1 << (7 - col))) {
+                const uint32_t pixel_index = (y + row) * (framebuffer->pitch / 4) + (x + col);
+                fb_ptr[pixel_index] = 0xffffff;
+            }
+        }
+    }
+}
+
 // The following will be our kernel's entry point.
 // If renaming kmain() to something else, make sure to change the
 // linker script accordingly.
@@ -120,6 +164,11 @@ void kmain(void) {
         volatile uint32_t *fb_ptr = framebuffer->address;
         fb_ptr[i * (framebuffer->pitch / 4) + i] = (i / 100 < sizeof(colors) / sizeof(colors[0]) ? colors[i / 100] : 0xffffff);
     }
+
+    // hmm
+    put_char(framebuffer, 'H', framebuffer->width / 2 - 8, framebuffer->height / 2);
+    put_char(framebuffer, 'M', framebuffer->width / 2, framebuffer->height / 2);
+    put_char(framebuffer, 'M', framebuffer->width / 2 + 8, framebuffer->height / 2);
 
     // We're done, just hang...
     hcf();
