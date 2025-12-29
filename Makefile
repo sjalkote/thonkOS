@@ -2,7 +2,6 @@
 .SUFFIXES:
 
 # This is the name that our final executable will have.
-# Change as needed.
 override OUTPUT := thonkOS
 
 # User controllable toolchain and toolchain prefix.
@@ -136,7 +135,7 @@ out/obj/%.asm.o: %.asm Makefile
 clean:
 	rm -rf out
 
-# Build ISO image
+# Build BIOS/UEFI hybrid ISO image
 iso: all
 	mkdir -p out/iso/boot
 	cp -v out/bin/thonkOS out/iso/boot/
