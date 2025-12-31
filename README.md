@@ -22,3 +22,5 @@ To create the bootable ISO image:
 2. Run `make iso` which will handle the rest and generate the file in `out/thonkOS.iso`.
 
 To **run** the OS using QEMU you can use the `make run` script (automatically rebuilds ISO when necessary).
+
+<img width="1392" height="940" alt="firstscreenshot" src="https://github.com/user-attachments/assets/8b854efe-0e4f-4f6b-a5ea-0baca4fef5d4" />
