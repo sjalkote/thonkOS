@@ -159,13 +159,14 @@ void init_screen(struct limine_framebuffer *fb) {
 void newline(void) {
     x = 0;
     y += 10;
+    // todo: scroll if (y >= framebuffer->height)
 }
 
 /**
  * Moves the cursor to the right by four spaces, or to the next line if at the end.
  */
 void tab(void) {
-    x += 32;
+    x += 8 * 4;
     if (x >= framebuffer->width)
         newline();
 }
@@ -220,6 +221,16 @@ void put_string(const char *str) {
  */
 void set_color(const uint32_t new_color) {
     color = new_color;
+}
+
+/**
+ * Sets the current text color using RGB values (0-255).
+ * @param r Red component.
+ * @param g Green component.
+ * @param b Blue component.
+ */
+void set_color_rgb(const uint8_t r, const uint8_t g, const uint8_t b) {
+    color = (r << 16) | (g << 8) | b;
 }
 
 /**

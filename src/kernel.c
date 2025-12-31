@@ -133,9 +133,9 @@ void kmain(void) {
     print("\t1234567890\t");
     set_color(colors[5]);
     println("\t!@#$%^&*()-=_+[]{};':\",.<>/?\\|`~");
-    set_color(colors[4]);
+    set_color_rgb(57, 117, 198);
     println("ok nice it works");
-    set_color(0xffffff);
+    set_color_rgb(255, 255, 255);
     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\rII");
 
     // We're done, just hang...
