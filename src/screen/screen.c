@@ -67,7 +67,7 @@ uint8_t font8x8[128][8] = {
     { 0x18, 0x0C, 0x06, 0x03, 0x06, 0x0C, 0x18, 0x00},   // U+003C (<)
     { 0x00, 0x00, 0x3F, 0x00, 0x00, 0x3F, 0x00, 0x00},   // U+003D (=)
     { 0x06, 0x0C, 0x18, 0x30, 0x18, 0x0C, 0x06, 0x00},   // U+003E (>)
-    { 0x78, 0xCC, 0x0C, 0x18, 0x30, 0x00, 0x30, 0x00},   // U+003F (?)
+    { 0x1E, 0x33, 0x30, 0x18, 0x0C, 0x00, 0x0C, 0x00},   // U+003F (?)
     { 0x3E, 0x63, 0x7B, 0x7B, 0x7B, 0x03, 0x1E, 0x00},   // U+0040 (@)
     { 0x0C, 0x1E, 0x33, 0x33, 0x3F, 0x33, 0x33, 0x00},   // U+0041 (A)
     { 0x3F, 0x66, 0x66, 0x3E, 0x66, 0x66, 0x3F, 0x00},   // U+0042 (B)
@@ -137,9 +137,9 @@ uint8_t font8x8[128][8] = {
 /// Current framebuffer being used for screen output.
 static struct limine_framebuffer *framebuffer;
 /// Current cursor x position.
-static int x = 0;
+static uint64_t x = 0;
 /// Current cursor y position.
-static int y = 0;
+static uint64_t y = 0;
 
 /**
  * Initializes the screen with the provided framebuffer. Sets cursor position to (0, 0).
@@ -152,22 +152,47 @@ void init_screen(struct limine_framebuffer *fb) {
 }
 
 /**
- * Writes the specified character to the framebuffer at the given (x, y) coordinate position.
- * @param framebuffer The limine framebuffer to write to.
- * @param c The character to write. Must be a standard ASCII between [0, 127].
- * @param x The x-coordinate position to write at.
- * @param y The y-coordinate position to write at.
+ * Moves the cursor to the beginning of the next line.
  */
-void put_char(const char c, const uint32_t x, const uint32_t y) {
+void newline(void) {
+    x = 0;
+    y += 10;
+}
+
+/**
+ * Moves the cursor to the right by four spaces, or to the next line if at the end.
+ */
+void tab(void) {
+    x += 32;
+    if (x >= framebuffer->width)
+        newline();
+}
+
+/**
+ * Writes the specified character to the framebuffer at the given (x, y) coordinate position.
+ * @param c The character to write. Must be a standard ASCII between [0, 127].
+ */
+void put_char(const char c) {
     const uint8_t *glyph = font8x8[(uint8_t)c];
     volatile uint32_t *fb_ptr = framebuffer->address;
 
-    for (uint32_t row = 0; row < 8; row++) {
-        for (uint32_t col = 0; col < 8; col++) {
-            if (glyph[row] & (1 << (7 - col))) {
-                const uint32_t pixel_index = (y + row) * (framebuffer->pitch / 4) + (x + col);
-                fb_ptr[pixel_index] = 0xffffff;
+    switch (c) {
+    case '\n':
+        newline();
+        break;
+    case '\t':
+        tab();
+        break;
+    default:
+        for (uint32_t row = 0; row < 8; row++) {
+            for (uint32_t col = 0; col < 8; col++) {
+                if (glyph[row] & (1u << (col))) {
+                    const uint32_t pixel_index = (y + row) * (framebuffer->pitch / 4) + (x + col);
+                    fb_ptr[pixel_index] = 0xffffff;
+                }
             }
         }
+        x += 8;
+        break;
     }
 }

@@ -126,10 +126,14 @@ void kmain(void) {
     }
 
     // hmm
-    put_char('H', framebuffer->width / 2 - 8, framebuffer->height / 2);
-    put_char('M', framebuffer->width / 2, framebuffer->height / 2);
-    put_char('M', framebuffer->width / 2 + 8, framebuffer->height / 2);
-    put_char('?', framebuffer->width / 2 + 16, framebuffer->height / 2);
+    put_char('H');
+    put_char('M');
+    put_char('M');
+    put_char('?');
+    put_char('\n');
+    put_char('C');
+    put_char('\t');
+    put_char('!');
 
     // We're done, just hang...
     hcf();
