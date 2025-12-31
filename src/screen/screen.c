@@ -185,6 +185,9 @@ void put_char(const char c) {
     case '\t':
         tab();
         break;
+    case '\r':
+        x = 0;
+        break;
     default:
         for (uint32_t row = 0; row < 8; row++) {
             for (uint32_t col = 0; col < 8; col++) {
@@ -195,6 +198,8 @@ void put_char(const char c) {
             }
         }
         x += 8;
+        if (x >= framebuffer->width)
+            newline();
         break;
     }
 }

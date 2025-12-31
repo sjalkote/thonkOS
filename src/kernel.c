@@ -133,8 +133,10 @@ void kmain(void) {
     print("\t1234567890\t");
     set_color(colors[5]);
     println("\t!@#$%^&*()-=_+[]{};':\",.<>/?\\|`~");
-    set_color(0xffffff);
+    set_color(colors[4]);
     println("ok nice it works");
+    set_color(0xffffff);
+    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\rII");
 
     // We're done, just hang...
     hcf();
