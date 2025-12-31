@@ -134,6 +134,23 @@ uint8_t font8x8[128][8] = {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}    // U+007F
 };
 
+/// Current framebuffer being used for screen output.
+static struct limine_framebuffer *framebuffer;
+/// Current cursor x position.
+static int x = 0;
+/// Current cursor y position.
+static int y = 0;
+
+/**
+ * Initializes the screen with the provided framebuffer. Sets cursor position to (0, 0).
+ * @param fb The limine framebuffer to write to.
+ */
+void init_screen(struct limine_framebuffer *fb) {
+    framebuffer = fb;
+    x = 0;
+    y = 0;
+}
+
 /**
  * Writes the specified character to the framebuffer at the given (x, y) coordinate position.
  * @param framebuffer The limine framebuffer to write to.
@@ -141,7 +158,7 @@ uint8_t font8x8[128][8] = {
  * @param x The x-coordinate position to write at.
  * @param y The y-coordinate position to write at.
  */
-void put_char(const struct limine_framebuffer *framebuffer, const char c, const uint32_t x, const uint32_t y) {
+void put_char(const char c, const uint32_t x, const uint32_t y) {
     const uint8_t *glyph = font8x8[(uint8_t)c];
     volatile uint32_t *fb_ptr = framebuffer->address;
 

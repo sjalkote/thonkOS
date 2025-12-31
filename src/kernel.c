@@ -114,6 +114,9 @@ void kmain(void) {
     // Fetch the first framebuffer.
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
 
+    // Initialize screen
+    init_screen(framebuffer);
+
     // Note: we assume the framebuffer model is RGB with 32-bit pixels.
     uint64_t minDimension = framebuffer->height < framebuffer->width ? framebuffer->height : framebuffer->width;
     const int colors[] = {0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0xff00ff};
@@ -123,10 +126,10 @@ void kmain(void) {
     }
 
     // hmm
-    put_char(framebuffer, 'H', framebuffer->width / 2 - 8, framebuffer->height / 2);
-    put_char(framebuffer, 'M', framebuffer->width / 2, framebuffer->height / 2);
-    put_char(framebuffer, 'M', framebuffer->width / 2 + 8, framebuffer->height / 2);
-    put_char(framebuffer, '?', framebuffer->width / 2 + 16, framebuffer->height / 2);
+    put_char('H', framebuffer->width / 2 - 8, framebuffer->height / 2);
+    put_char('M', framebuffer->width / 2, framebuffer->height / 2);
+    put_char('M', framebuffer->width / 2 + 8, framebuffer->height / 2);
+    put_char('?', framebuffer->width / 2 + 16, framebuffer->height / 2);
 
     // We're done, just hang...
     hcf();
