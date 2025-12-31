@@ -140,6 +140,8 @@ static struct limine_framebuffer *framebuffer;
 static uint64_t x = 0;
 /// Current cursor y position.
 static uint64_t y = 0;
+/// Current text color (default to white).
+static uint32_t color = 0xFFFFFF;
 
 /**
  * Initializes the screen with the provided framebuffer. Sets cursor position to (0, 0).
@@ -169,7 +171,7 @@ void tab(void) {
 }
 
 /**
- * Writes the specified character to the framebuffer at the given (x, y) coordinate position.
+ * Writes the specified character to the framebuffer at the current cursor position.
  * @param c The character to write. Must be a standard ASCII between [0, 127].
  */
 void put_char(const char c) {
@@ -188,11 +190,46 @@ void put_char(const char c) {
             for (uint32_t col = 0; col < 8; col++) {
                 if (glyph[row] & (1u << (col))) {
                     const uint32_t pixel_index = (y + row) * (framebuffer->pitch / 4) + (x + col);
-                    fb_ptr[pixel_index] = 0xffffff;
+                    fb_ptr[pixel_index] = color;
                 }
             }
         }
         x += 8;
         break;
     }
+}
+
+/**
+ * Writes a null-terminated string to the framebuffer at the current cursor position.
+ * @param str The string to write.
+ */
+void put_string(const char *str) {
+    while (*str) {
+        put_char(*str++);
+    }
+}
+
+/**
+ * Sets the current text color.
+ * @param new_color The color in hexadecimal format (0xRRGGBB).
+ */
+void set_color(const uint32_t new_color) {
+    color = new_color;
+}
+
+/**
+ * Prints the specified string to the screen.
+ * @param str The string to write.
+ */
+void print(const char *str) {
+    put_string(str);
+}
+
+/**
+ * Prints the specified string and inserts a newline.
+ * @param str The string to write.
+ */
+void println(const char *str) {
+    put_string(str);
+    newline();
 }

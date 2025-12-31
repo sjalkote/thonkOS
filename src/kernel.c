@@ -125,15 +125,16 @@ void kmain(void) {
         fb_ptr[i * (framebuffer->pitch / 4) + i] = (i / 100 < sizeof(colors) / sizeof(colors[0]) ? colors[i / 100] : 0xffffff);
     }
 
-    // hmm
-    put_char('H');
-    put_char('M');
-    put_char('M');
-    put_char('?');
-    put_char('\n');
-    put_char('C');
-    put_char('\t');
-    put_char('!');
+    set_color(colors[1]);
+    println("\tabcdefghijklmnopqrstuvwxyz");
+    set_color(colors[3]);
+    println("\tABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    set_color(0x00ffff);
+    print("\t1234567890\t");
+    set_color(colors[5]);
+    println("\t!@#$%^&*()-=_+[]{};':\",.<>/?\\|`~");
+    set_color(0xffffff);
+    println("ok nice it works");
 
     // We're done, just hang...
     hcf();
