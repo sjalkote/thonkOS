@@ -79,6 +79,9 @@ override CPPFLAGS := \
     -MMD \
     -MP
 
+# Extra flags for debugging with gdb
+override DEBUG_FLAGS := -g3 -DDEBUG
+
 # Internal nasm flags that should not be changed by the user.
 override NASMFLAGS := \
     -f elf64 \
@@ -118,12 +121,12 @@ out/bin/$(OUTPUT): Makefile src/linker.lds $(OBJ)
 # Compilation rules for *.c files.
 out/obj/%.c.o: %.c Makefile
 	mkdir -p "$(dir $@)"
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.S files.
 out/obj/%.S.o: %.S Makefile
 	mkdir -p "$(dir $@)"
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.asm (nasm) files.
 out/obj/%.asm.o: %.asm Makefile
