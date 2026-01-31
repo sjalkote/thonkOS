@@ -91,6 +91,7 @@ int memcmp(const void *s1, const void *s2, size_t n) {
 
 // Halt and catch fire function.
 static void hcf(void) {
+    // ReSharper disable once CppDFAEndlessLoop
     for (;;) {
         asm ("hlt");
     }
@@ -106,8 +107,7 @@ void kmain(void) {
     }
 
     // Ensure we got a framebuffer.
-    if (framebuffer_request.response == NULL
-     || framebuffer_request.response->framebuffer_count < 1) {
+    if (framebuffer_request.response == NULL || framebuffer_request.response->framebuffer_count < 1) {
         hcf();
     }
 
@@ -136,7 +136,7 @@ void kmain(void) {
     set_color_rgb(57, 117, 198);
     println("ok nice it works");
     set_color_rgb(255, 255, 255);
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\taaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\rII");
+    printf("Testing some %s string and %c char. Also %% and %. and %", "format", 'c');
 
     // We're done, just hang...
     hcf();

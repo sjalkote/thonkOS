@@ -8,4 +8,5 @@ void put_char(char c);
 void set_color(uint32_t color);
 void set_color_rgb(uint8_t r, uint8_t g, uint8_t b);
 void print(const char *str);
+void printf(const char *format, ...);
 void println(const char *str);

@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <limine.h>
+#include <stdarg.h>
 #include <screen/screen.h>
 
 /** Contains the 8x8 font bitmap for ASCII characters 0-127, where each character has 8 bytes/rows. */
@@ -239,6 +240,44 @@ void set_color_rgb(const uint8_t r, const uint8_t g, const uint8_t b) {
  */
 void print(const char *str) {
     put_string(str);
+}
+
+/**
+ * Small implementation of printf supporting %s, and %c formatting.
+ * @param format The format string.
+ * @param ... The arguments to format into the string.
+ */
+void printf(const char *format, ...) {
+    va_list args;
+    va_start(args, format);
+    for (const char* c = format; *c != '\0'; c++ ) {
+        if (*c == '%') {
+            c++;
+            switch (*c) {
+                case 's': {
+                    const char* str = va_arg(args, const char*);
+                    put_string(str);
+                    break;
+                }
+                case 'c': {
+                    const char ch = (char)va_arg(args, int);
+                    put_char(ch);
+                    break;
+                }
+                case '%': {
+                    put_char('%');
+                    break;
+                }
+                default: {
+                    put_char('%');
+                    put_char(*c);
+                }
+            }
+        } else {
+            put_char(*c);
+        }
+    }
+    va_end(args);
 }
 
 /**
