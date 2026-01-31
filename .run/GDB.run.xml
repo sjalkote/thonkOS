@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="GDB" type="com.jetbrains.cidr.embedded.customgdbserver.type" factoryName="com.jetbrains.cidr.embedded.customgdbserver.factory" PROGRAM_PARAMS="-s -S -m 512 -boot d -cdrom out/thonkOS.iso" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="thonkOS" TARGET_NAME="iso" CONFIG_NAME="iso" version="1" RUN_PATH="$PROJECT_DIR$/out/bin/thonkOS">
-    <custom-gdb-server version="1" gdb-connect="localhost:1234" executable="/opt/homebrew/bin/qemu-system-x86_64" warmup-ms="0" download-type="UPDATED_ONLY" reset-cmd="monitor reset" reset-type="AFTER_DOWNLOAD">
+    <custom-gdb-server version="1" gdb-connect="localhost:1234" executable="/opt/homebrew/bin/qemu-system-x86_64" warmup-ms="0" download-type="NONE" reset-cmd="monitor reset" reset-type="AFTER_DOWNLOAD">
       <debugger kind="GDB">/opt/homebrew/bin/x86_64-elf-gdb</debugger>
     </custom-gdb-server>
     <method v="2">
