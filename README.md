@@ -23,4 +23,8 @@ To create the bootable ISO image:
 
 To **run** the OS using QEMU you can use the `make run` script (automatically rebuilds ISO when necessary).
 
+> [!TIP]
+> I created a really useful run config for CLion that combines gdb and QEMU's built in gdb server with CLion for native debugging in the IDE.
+> The run configuration is located at [`.run/GDB.run.xml`](./.run/GDB.run.xml), so take advantage of the goated CLion debugger UI.
+
 <img width="1392" height="940" alt="firstscreenshot" src="https://github.com/user-attachments/assets/8b854efe-0e4f-4f6b-a5ea-0baca4fef5d4" />
