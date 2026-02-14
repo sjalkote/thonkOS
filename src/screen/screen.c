@@ -264,6 +264,27 @@ void printf(const char *format, ...) {
                     put_char(ch);
                     break;
                 }
+                case 'd': {
+                    int num = va_arg(args, int);
+                    char temp[12];
+                    if (num < 0) {
+                        put_char('-');
+                        num = -num;
+                    } else if (num == 0) {
+                        put_char('0');
+                        break;
+                    }
+                    int tmp_i = 0;
+                    while (num > 0) {
+                        temp[tmp_i++] = '0' + (num % 10);
+                        num /= 10;
+                    }
+                    // print the digits in the correct order
+                    for (int i = tmp_i - 1; i >= 0; i--) {
+                        put_char(temp[i]);
+                    }
+                    break;
+                }
                 case '%': {
                     put_char('%');
                     break;

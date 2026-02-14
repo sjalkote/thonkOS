@@ -136,7 +136,7 @@ void kmain(void) {
     set_color_rgb(57, 117, 198);
     println("ok nice it works");
     set_color_rgb(255, 255, 255);
-    printf("Testing some %s string and %c char. Also %% and %. and %", "format", 'c');
+    printf("Testing some %s string and %c char. Also %% and %.\n\tAlso %d, %d, and %d", "format", 'c', -67, 0, INT32_MAX);
 
     // We're done, just hang...
     hcf();
