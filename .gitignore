@@ -3,3 +3,5 @@ out/
 # IDE-related ignores
 .idea/
 .vscode/
+.cache/
+compile_commands.json

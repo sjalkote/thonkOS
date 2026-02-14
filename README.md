@@ -28,3 +28,9 @@ To **run** the OS using QEMU you can use the `make run` script (automatically re
 > The run configuration is located at [`.run/GDB.run.xml`](./.run/GDB.run.xml), so take advantage of the goated CLion debugger UI.
 
 <img width="1392" height="940" alt="firstscreenshot" src="https://github.com/user-attachments/assets/8b854efe-0e4f-4f6b-a5ea-0baca4fef5d4" />
+
+
+Using `bear` you can generate a `compile_commands.json` file for the `clangd` language server to use.
+```bash
+make clean; bear -- make
+```
